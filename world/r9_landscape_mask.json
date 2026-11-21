@@ -1,0 +1,23 @@
+{
+  "source": "R6/cache/semantic_raster.npz",
+  "width": 3232,
+  "height": 1856,
+  "origin_xz": [
+    -1630.0,
+    -926.0
+  ],
+  "resolution_u": 1.0,
+  "byte_length": 5998592,
+  "kinds": {
+    "1": "turf",
+    "2": "edge",
+    "3": "under_canopy",
+    "4": "existing_scrub_margin"
+  },
+  "eligible_cells": {
+    "1": 3161180,
+    "2": 147517,
+    "3": 805474,
+    "4": 15538
+  }
+}

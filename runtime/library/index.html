@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>津南图书馆 · 共享中庭</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./library.css">
+  <script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+</head>
+<body>
+  <header>
+    <a href="/runtime/?view=R7_LIBRARY_FRONT&walk=1">返回校园</a>
+    <h1>图书馆共享中庭</h1>
+    <select id="view" aria-label="图书馆视角">
+      <option value="southDoor">南入口 · 二层门厅</option>
+      <option value="northDoor">北入口 · 二层门厅</option>
+      <option value="west">西侧中庭 · 三层</option>
+      <option value="west4">西侧中庭 · 四层</option>
+      <option value="west5">西侧中庭 · 五层</option>
+      <option value="east">东侧中庭 · 三层</option>
+      <option value="westStair">西侧中庭 · 三层楼梯入口</option>
+    </select>
+    <button id="mouse" type="button">锁定鼠标</button>
+  </header>
+  <main id="viewport" aria-label="图书馆三维漫游"></main>
+  <div id="cross" aria-hidden="true"></div>
+  <aside>
+    <output id="position">正在加载中庭</output>
+    <p>WASD 漫游 · 拖动转向 · Shift 加速 · Esc 释放鼠标</p>
+  </aside>
+  <script type="module" src="./library.js"></script>
+</body>
+</html>

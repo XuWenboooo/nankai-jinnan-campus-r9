@@ -1,0 +1,74 @@
+{
+  "pavingBounds": [
+    -1010,
+    292,
+    -886,
+    318
+  ],
+  "shrubs": [
+    {
+      "id": "S012220",
+      "root": [
+        -964.75,
+        0,
+        302.25
+      ],
+      "width": 1.12,
+      "height": 0.34
+    }
+  ],
+  "groundFlora": [
+    {
+      "id": "GF_033763",
+      "mesh": "GROUND_FLORA_s_-8_2",
+      "range": [
+        60033,
+        60123
+      ],
+      "root": [
+        -964.7876586914062,
+        0,
+        302.67417907714844
+      ],
+      "factor": 0.32
+    },
+    {
+      "id": "GF_033668",
+      "mesh": "GROUND_FLORA_s_-8_2",
+      "range": [
+        57957,
+        58047
+      ],
+      "root": [
+        -938.5446472167969,
+        0,
+        299.2874298095703
+      ],
+      "factor": 0.37
+    },
+    {
+      "id": "GF_033789",
+      "mesh": "GROUND_FLORA_s_-8_2",
+      "range": [
+        61220,
+        61310
+      ],
+      "root": [
+        -953.4292297363281,
+        0,
+        303.61053466796875
+      ],
+      "factor": 0.35
+    }
+  ],
+  "basis": "Campus photo and registered south shore: low, separate planting beside the path. Slab sizes are visually inferred.",
+  "originalPalePath": {
+    "mesh": "s_-8_2__white_marking",
+    "bounds": [
+      -978,
+      300,
+      -939,
+      314
+    ]
+  }
+}

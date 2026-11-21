@@ -1,0 +1,32 @@
+{
+  "scope": "F2 entrance lobby and F3–F5 paired atria and public reading wings",
+  "units": "metres",
+  "structural_span_x": 168,
+  "entrance_lobby": {
+    "floor_y": 5.1,
+    "vestibule_planes_z": [-23.9, 24.4],
+    "hall_half_width": 16.8,
+    "drawing": "D:/UserData/Downloads/2楼图书馆.jpg"
+  },
+  "floor_limits": [-86, -20.6, 86, 20.6],
+  "levels": [
+    {"id":"F3","elevation":13.2},
+    {"id":"F4","elevation":18.3},
+    {"id":"F5","elevation":23.4}
+  ],
+  "atria": [
+    {"id":"west","name":"西侧共享中庭","bounds":[-67.2,-3.6,-50.4,3.6]},
+    {"id":"east","name":"东侧共享中庭","bounds":[50.4,-3.6,67.2,3.6]}
+  ],
+  "sources": {
+    "west_east_bay_width": "D:/UserData/Downloads/4楼图书馆.jpg",
+    "lower_level": "D:/UserData/Downloads/3楼图书馆.jpg",
+    "upper_level": "D:/UserData/Downloads/5楼图书馆.jpg",
+    "designer_section_and_photography": "https://www.gooood.cn/library-integrated-service-building-of-nankai-university-new-campus-china-by-gpc-of-tadi.htm"
+  },
+  "interpretations": [
+    "West and east voids use drawing grids 3–5 and 17–19 and one transverse bay.",
+    "Stair landings, wood panel joints and the precise furniture dimensions are estimated from the designer photos and the floor drawings.",
+    "The campus entrance opens a separate interior scene at its matching F2 vestibule. A continuous metric shell connection is pending."
+  ]
+}

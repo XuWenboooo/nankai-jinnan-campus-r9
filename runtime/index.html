@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>南开津南 · 连续校园</title>
+<link rel="icon" href="data:,">
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font:14px/1.5 system-ui,"Microsoft YaHei",sans-serif;background:#b6d0de;color:#203632}canvas{display:block;width:100%;height:100%}header{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#f9fbf5ed;border:1px solid #b7c9bf;border-radius:7px;padding:9px 12px;z-index:2}h1{font-size:18px;margin:0 15px 0 0;font-weight:650}button,select{font:inherit;border:1px solid #a8beb1;border-radius:4px;padding:5px 9px;background:#f4f8ef;color:#243b32;cursor:pointer}button[aria-pressed=true]{background:#d0e3b6}#load{position:absolute;bottom:18px;left:18px;background:#f9fbf5ec;border:1px solid #b6c5bd;border-radius:6px;padding:10px 14px;max-width:680px}#error{color:#a22c26}#hud{position:absolute;bottom:15px;right:16px;background:#f9fbf5e6;border-radius:5px;padding:6px 10px;font:12px/1.5 monospace}#instructions{color:#566b5f;font-size:12px}a{color:#345d45}.sky-control{display:inline-flex;align-items:center;gap:6px;color:#354c3f}.sky-control input{width:105px;accent-color:#597756}.sky-control output{min-width:3em;font-variant-numeric:tabular-nums}#cross{position:absolute;left:50%;top:50%;display:none;pointer-events:none;color:#fff}
+#campus-minimap{position:absolute;right:16px;bottom:51px;width:248px;z-index:2;padding:8px;background:#f9fbf5f5;border:1px solid #afc3b7;border-radius:8px;box-shadow:0 3px 18px #213a312a;color:#203632}
+#campus-minimap[hidden],#campus-map-panel[hidden],#campus-map-marker[hidden]{display:none}
+#campus-minimap .map-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px;font-size:13px;font-weight:650}
+#campus-minimap button{padding:2px 6px;font-size:11px;white-space:nowrap}
+#campus-map-panel{position:relative;overflow:hidden;background:#e5ebe2;border:1px solid #bacbbe;border-radius:4px}
+#campus-map-panel img{display:block;width:100%;height:auto}
+#campus-map-marker{position:absolute;width:17px;height:19px;filter:drop-shadow(0 0 2px #1c342b);pointer-events:none}
+#campus-map-marker:before,#campus-map-marker:after{content:'';position:absolute;inset:0;clip-path:polygon(50% 0,100% 100%,50% 75%,0 100%);background:#fff}
+#campus-map-marker:after{inset:3px 3px 4px;background:#204e90}
+#campus-minimap .map-coordinates{display:grid;grid-template-columns:1fr auto;align-items:end;gap:6px;padding-top:5px}
+#campus-minimap strong{font:600 11px/1.6 ui-monospace,Consolas,monospace;white-space:nowrap}
+#campus-minimap small{display:block;color:#52685c;font-size:10px}
+@media(max-width:600px){#campus-minimap{right:8px;bottom:49px;width:210px}#campus-minimap .map-coordinates{grid-template-columns:1fr}#campus-map-copy{justify-self:start}}
+@media (max-width:600px){
+  html,body{max-width:100vw}
+  header{left:8px;right:8px;top:8px;gap:5px;padding:7px 9px}
+  header h1{flex:1 0 100%;font-size:16px}
+  #view{width:100%;min-width:0;max-width:100%;flex:1 1 100%;text-overflow:ellipsis}
+  header button{font-size:12px;padding:4px 7px}
+  #instructions{flex-basis:100%;font-size:11px}
+  #view-hint{min-width:0;overflow-wrap:anywhere}
+  #load{left:8px;bottom:8px;max-width:calc(100vw - 16px)}
+  #hud{right:8px;bottom:8px;max-width:calc(100vw - 16px)}
+}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+<header><h1>南开津南 · 连续校园</h1><select id="view" aria-label="检查视点"></select><button id="walk" aria-pressed="false">WASD 漫游</button><button id="orbit" aria-pressed="true">自由观察</button><button id="dusk" aria-pressed="false">暮色照明</button><button id="light">诊断日光</button><label class="sky-control" for="sky-brightness">天空明暗 <input id="sky-brightness" type="range" min="20" max="125" step="1" value="100"><output id="sky-value" for="sky-brightness">100%</output></label><button id="source">原体素对照</button><button id="sport">理科球场</button><a href="./library/">图书馆中庭</a><span id="instructions">WASD 平移 · Shift 加速 · 拖动旋转 · 滚轮缩放</span><div id="view-hint" hidden style="flex-basis:100%;color:#385547">
+<span id="view-hint-text"></span> <a id="view-hint-source" target="_blank" rel="noopener noreferrer" hidden>原图机位</a>
+</div></header>
+<main id="canvas"></main><span id="cross">＋</span>
+<a id="enter-library" href="./library/?view=southDoor" hidden
+ style="position:absolute;bottom:28%;left:50%;translate:-50% 0;z-index:2;padding:8px 13px;border-radius:4px;background:#f9fbf5ee;color:#243b32;text-decoration:none">E · 进入图书馆二层</a>
+<div id="load"><strong id="status">正在读取工程</strong><div id="error"></div><div id="detail"></div></div><div id="hud"></div>
+<aside id="campus-minimap" aria-label="校园小地图" hidden>
+ <div class="map-bar"><span>校园地图</span><button id="campus-map-toggle" type="button" aria-expanded="true" aria-controls="campus-map-panel">收起</button></div>
+ <div id="campus-map-panel"><img src="./maps/jinnan_overview.png" alt="津南校区道路、建筑和主要地标"><span id="campus-map-marker" aria-hidden="true"></span></div>
+ <div class="map-coordinates"><div><strong id="campus-map-position">正在定位</strong><small>源坐标 · Y 为视点高度</small></div><button id="campus-map-copy" type="button" title="复制坐标、朝向和视野">复制机位</button></div>
+</aside>
+<script type="module" src="./app.js"></script>
+</html>

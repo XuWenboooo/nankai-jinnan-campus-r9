@@ -1,0 +1,1465 @@
+{
+  "version": 1,
+  "axis": "Y_UP",
+  "units": "source_units",
+  "seed": 20261110,
+  "forms": [
+    {
+      "id": "broad_01",
+      "seed": 20261110,
+      "parameters": {
+        "id": "broad_01",
+        "height": 10.0,
+        "width": 1.0,
+        "clear": 3.0,
+        "limbs": 15,
+        "lean": 0.35,
+        "leaf": [
+          104,
+          137,
+          62
+        ]
+      },
+      "bounds": [
+        [
+          -3.2005985889454154,
+          -0.020027945322545877,
+          -2.853158504967179
+        ],
+        [
+          3.7717501779372684,
+          10.786283482265066,
+          2.669382847133804
+        ]
+      ],
+      "height": 10.806311427587612,
+      "width_x": 6.972348766882684,
+      "width_z": 5.522541352100983,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/broad_01_lod0.glb",
+          "triangles": 79320,
+          "branches_triangles": 15012,
+          "leaf_triangles": 64308,
+          "leaves": 5359,
+          "bounds": [
+            [
+              -3.2005985889454154,
+              -0.020027945322545877,
+              -2.853158504967179
+            ],
+            [
+              3.7717501779372684,
+              10.786283482265066,
+              2.669382847133804
+            ]
+          ],
+          "bytes": 3504080,
+          "sha256": "849ce561ee7936333577038355c604c25c42ee388a3e7c44cda3c2cd8812e9c1"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/broad_01_lod1.glb",
+          "triangles": 3834,
+          "branches_triangles": 1494,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -3.112017366866806,
+              -0.019243156537413597,
+              -2.813022558268868
+            ],
+            [
+              3.7237481868752402,
+              10.711842449191339,
+              2.5733229264479065
+            ]
+          ],
+          "bytes": 402732,
+          "sha256": "cc67b0e4560c998a666155853c2d32781bf8acee89d476e875d7976ffb3a03ce"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/broad_01_lod2.glb",
+          "triangles": 1012,
+          "branches_triangles": 328,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -2.957925739251978,
+              -0.00948434229940176,
+              -2.798985139648112
+            ],
+            [
+              3.681501558965645,
+              10.694944626839575,
+              2.5591351639094793
+            ]
+          ],
+          "bytes": 292804,
+          "sha256": "561a14b2511db01e06f67c16e6f06631327cdde8aadab2fa15150ada85665163"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/broad_01_lod3.glb",
+          "triangles": 266,
+          "branches_triangles": 50,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -2.943037923046412,
+              -0.007280419114977121,
+              -2.6341824959574947
+            ],
+            [
+              3.6569486387500216,
+              10.235337399716448,
+              2.5407165727384564
+            ]
+          ],
+          "bytes": 261132,
+          "sha256": "0a0ce02ac65ca46ceb5cd68017b711637b69d5cdb6f6b1af4a293c64ac4d4085"
+        }
+      ]
+    },
+    {
+      "id": "upright_02",
+      "seed": 20262119,
+      "parameters": {
+        "id": "upright_02",
+        "height": 11.5,
+        "width": 0.72,
+        "clear": 3.8,
+        "limbs": 16,
+        "lean": 0.22,
+        "leaf": [
+          119,
+          147,
+          70
+        ]
+      },
+      "bounds": [
+        [
+          -2.5317475332857575,
+          -0.01991859212645751,
+          -2.2611002350558755
+        ],
+        [
+          2.7701007199569627,
+          11.735671461732077,
+          2.17654681307851
+        ]
+      ],
+      "height": 11.755590053858533,
+      "width_x": 5.301848253242721,
+      "width_z": 4.4376470481343855,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/upright_02_lod0.glb",
+          "triangles": 84584,
+          "branches_triangles": 15992,
+          "leaf_triangles": 68592,
+          "leaves": 5716,
+          "bounds": [
+            [
+              -2.5317475332857575,
+              -0.01991859212645751,
+              -2.2611002350558755
+            ],
+            [
+              2.7701007199569627,
+              11.735671461732077,
+              2.17654681307851
+            ]
+          ],
+          "bytes": 3720308,
+          "sha256": "1788fd3cfb47c60deafc99950358833c939520115e9004ace0245e6c300b5bad"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/upright_02_lod1.glb",
+          "triangles": 3918,
+          "branches_triangles": 1578,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -2.451811307364272,
+              -0.019171111285686493,
+              -2.213968451816886
+            ],
+            [
+              2.6946190335088938,
+              11.692936135528686,
+              2.108497244125589
+            ]
+          ],
+          "bytes": 405536,
+          "sha256": "e8e2ef2f4fc6fc82c4adf60ec028d947ce8d53768c83dd065b575aa61ec262f8"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/upright_02_lod2.glb",
+          "triangles": 1032,
+          "branches_triangles": 348,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -2.4198212537224495,
+              -0.00872749648988247,
+              -2.1276421659132034
+            ],
+            [
+              2.6790731747102106,
+              11.717716604657651,
+              2.0069007636582628
+            ]
+          ],
+          "bytes": 293624,
+          "sha256": "6c4ba357efe0d2847d1a5d54fc95e22989c4eb8434baf9ce1ca6b7311d17a3ea"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/upright_02_lod3.glb",
+          "triangles": 274,
+          "branches_triangles": 58,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -2.256355269677491,
+              -0.00419205566868186,
+              -2.112072108746222
+            ],
+            [
+              2.403430264364132,
+              11.629822555045925,
+              2.0607361380907325
+            ]
+          ],
+          "bytes": 261548,
+          "sha256": "3f2221833995631ccbb477d3618351a1c679424446ba44d4d7fa7495f23633d7"
+        }
+      ]
+    },
+    {
+      "id": "spreading_03",
+      "seed": 20263128,
+      "parameters": {
+        "id": "spreading_03",
+        "height": 9.1,
+        "width": 1.2,
+        "clear": 2.5,
+        "limbs": 16,
+        "lean": 0.48,
+        "leaf": [
+          91,
+          124,
+          50
+        ]
+      },
+      "bounds": [
+        [
+          -3.7487174092511446,
+          -0.02013908896539385,
+          -4.158489249242407
+        ],
+        [
+          3.891258271041088,
+          10.061944104937343,
+          4.005747420056317
+        ]
+      ],
+      "height": 10.082083193902736,
+      "width_x": 7.639975680292233,
+      "width_z": 8.164236669298724,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/spreading_03_lod0.glb",
+          "triangles": 84584,
+          "branches_triangles": 15992,
+          "leaf_triangles": 68592,
+          "leaves": 5716,
+          "bounds": [
+            [
+              -3.7487174092511446,
+              -0.02013908896539385,
+              -4.158489249242407
+            ],
+            [
+              3.891258271041088,
+              10.061944104937343,
+              4.005747420056317
+            ]
+          ],
+          "bytes": 3720300,
+          "sha256": "118665fe879f51dc1b8b71ffe514d290dcbfa783ee7e83f13c5c85a53ea6e013"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/spreading_03_lod1.glb",
+          "triangles": 3918,
+          "branches_triangles": 1578,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -3.642523478571731,
+              -0.019316839054226875,
+              -3.8010996576766747
+            ],
+            [
+              3.7905487443235972,
+              9.795565672612963,
+              3.9350272823787042
+            ]
+          ],
+          "bytes": 405532,
+          "sha256": "2c34c51875a6cb4ebded989d70ca75d7bb11c0c23b9982f073c9a50ef1c79ef8"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/spreading_03_lod2.glb",
+          "triangles": 1032,
+          "branches_triangles": 348,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -3.471816682948937,
+              -0.010240463539958,
+              -3.9805704490492992
+            ],
+            [
+              3.7314311539442815,
+              9.97034642982301,
+              3.9298373168262133
+            ]
+          ],
+          "bytes": 293616,
+          "sha256": "727ef31b30e474e8d3972636e74af929369631ddcf598b8c8e9886ed3a9fefc4"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/spreading_03_lod3.glb",
+          "triangles": 274,
+          "branches_triangles": 58,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -3.4602490031214,
+              -0.01036373432725668,
+              -3.984518792263299
+            ],
+            [
+              3.630141543213119,
+              9.905051505109082,
+              3.8057146044777843
+            ]
+          ],
+          "bytes": 261544,
+          "sha256": "0d4360c47e1850b3789153a205ba5e05922ddf1ed58e24d215417d4c9c6dd719"
+        }
+      ]
+    },
+    {
+      "id": "open_04",
+      "seed": 20264137,
+      "parameters": {
+        "id": "open_04",
+        "height": 10.7,
+        "width": 0.92,
+        "clear": 3.2,
+        "limbs": 13,
+        "lean": 0.65,
+        "leaf": [
+          117,
+          146,
+          67
+        ]
+      },
+      "bounds": [
+        [
+          -2.2858286181338996,
+          -0.02032214209156158,
+          -2.53992589427996
+        ],
+        [
+          4.350247587544386,
+          11.55013634891402,
+          2.6405816341698127
+        ]
+      ],
+      "height": 11.570458491005581,
+      "width_x": 6.636076205678286,
+      "width_z": 5.180507528449773,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/open_04_lod0.glb",
+          "triangles": 68780,
+          "branches_triangles": 13052,
+          "leaf_triangles": 55728,
+          "leaves": 4644,
+          "bounds": [
+            [
+              -2.2858286181338996,
+              -0.02032214209156158,
+              -2.53992589427996
+            ],
+            [
+              4.350247587544386,
+              11.55013634891402,
+              2.6405816341698127
+            ]
+          ],
+          "bytes": 3071128,
+          "sha256": "af6938eff75dd911d1b0299ddbe4a0cf0b0e525fdc9d0505280423533911e4fb"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/open_04_lod1.glb",
+          "triangles": 3666,
+          "branches_triangles": 1326,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -2.212701608096922,
+              -0.01944582909345627,
+              -2.4863749975520304
+            ],
+            [
+              4.21963838248448,
+              11.53735401700464,
+              2.5987463395284056
+            ]
+          ],
+          "bytes": 397132,
+          "sha256": "1797b589e7ef06d36f55ec06ed322a73f041237d1780f08405f6611ba9c49d8b"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/open_04_lod2.glb",
+          "triangles": 972,
+          "branches_triangles": 288,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -2.1949586822741125,
+              -0.011233671568334103,
+              -2.4590977013220003
+            ],
+            [
+              4.269858585770887,
+              11.495175206417278,
+              2.5136350741580227
+            ]
+          ],
+          "bytes": 291168,
+          "sha256": "8df0bc5dd06f0e19c7fb1addcab68cf618704c3f4ec7fc396ce6866053d0db73"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/open_04_lod3.glb",
+          "triangles": 266,
+          "branches_triangles": 50,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -2.0967741767420156,
+              -0.014395363628864288,
+              -2.124964586118949
+            ],
+            [
+              3.9762313278280663,
+              11.500564745234076,
+              2.3211000105889497
+            ]
+          ],
+          "bytes": 261132,
+          "sha256": "c59db18a144e82f53415602203bcf0debef909316d74740032cec51aa63cfcb9"
+        }
+      ]
+    },
+    {
+      "id": "young_05",
+      "seed": 20265146,
+      "parameters": {
+        "id": "young_05",
+        "height": 7.4,
+        "width": 0.74,
+        "clear": 2.3,
+        "limbs": 12,
+        "lean": 0.28,
+        "leaf": [
+          128,
+          153,
+          80
+        ]
+      },
+      "bounds": [
+        [
+          -1.910462160598598,
+          -0.019911276224341464,
+          -2.0401409878310335
+        ],
+        [
+          2.7062734589230018,
+          8.053873295375313,
+          2.6368557628897142
+        ]
+      ],
+      "height": 8.073784571599655,
+      "width_x": 4.6167356195216,
+      "width_z": 4.676996750720748,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/young_05_lod0.glb",
+          "triangles": 63516,
+          "branches_triangles": 12072,
+          "leaf_triangles": 51444,
+          "leaves": 4287,
+          "bounds": [
+            [
+              -1.910462160598598,
+              -0.019911276224341464,
+              -2.0401409878310335
+            ],
+            [
+              2.7062734589230018,
+              8.053873295375313,
+              2.6368557628897142
+            ]
+          ],
+          "bytes": 2854908,
+          "sha256": "4ad1af1c4981811a29dd947ce16cb2e7509a0bb3d9f82217b1e0b131ccdefd9c"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/young_05_lod1.glb",
+          "triangles": 3582,
+          "branches_triangles": 1242,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -1.856929630224121,
+              -0.01915404014289379,
+              -1.9896548755386532
+            ],
+            [
+              2.654333247722687,
+              7.868129826262994,
+              2.603975238421661
+            ]
+          ],
+          "bytes": 394328,
+          "sha256": "557e6b098487ad26b38b48722a0ef480ec3ff9b37f8afb48aa4a7397f4491123"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/young_05_lod2.glb",
+          "triangles": 952,
+          "branches_triangles": 268,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -1.7900124766177776,
+              -0.00907138455659151,
+              -1.953202786296559
+            ],
+            [
+              2.555435153236023,
+              7.978064160017747,
+              2.5217729021031237
+            ]
+          ],
+          "bytes": 290356,
+          "sha256": "e64d2ee82fdec7ecf921c975cc9e246c77d6eedeebf2df02006c4cf7b3cc8ec3"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/young_05_lod3.glb",
+          "triangles": 258,
+          "branches_triangles": 42,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -1.8542392226955442,
+              -0.005616495851427317,
+              -1.9074640380792487
+            ],
+            [
+              2.530047697552517,
+              7.837653006304999,
+              2.3599964569629837
+            ]
+          ],
+          "bytes": 260716,
+          "sha256": "e5b00d14f9f7960361574a3d4517866f93941ccb9a958b392e2b213e7ac6fd68"
+        }
+      ]
+    },
+    {
+      "id": "asymmetric_06",
+      "seed": 20266155,
+      "parameters": {
+        "id": "asymmetric_06",
+        "height": 9.8,
+        "width": 1.02,
+        "clear": 2.8,
+        "limbs": 15,
+        "lean": 0.8,
+        "leaf": [
+          98,
+          137,
+          62
+        ]
+      },
+      "bounds": [
+        [
+          -3.2602622712562144,
+          -0.020454500997034497,
+          -3.5472915678119077
+        ],
+        [
+          3.327516653893894,
+          10.57164776758969,
+          2.9587996461506636
+        ]
+      ],
+      "height": 10.592102268586725,
+      "width_x": 6.587778925150108,
+      "width_z": 6.506091213962572,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/asymmetric_06_lod0.glb",
+          "triangles": 79320,
+          "branches_triangles": 15012,
+          "leaf_triangles": 64308,
+          "leaves": 5359,
+          "bounds": [
+            [
+              -3.2602622712562144,
+              -0.020454500997034497,
+              -3.5472915678119077
+            ],
+            [
+              3.327516653893894,
+              10.57164776758969,
+              2.9587996461506636
+            ]
+          ],
+          "bytes": 3504080,
+          "sha256": "cddeb824f2ac52cdcc9744cc03d82054a654a1697dededb163d165af7d095f63"
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/asymmetric_06_lod1.glb",
+          "triangles": 3834,
+          "branches_triangles": 1494,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -3.130600922224177,
+              -0.01953447237610817,
+              -3.518371403031889
+            ],
+            [
+              3.2577272306971885,
+              10.516474465591815,
+              2.8364776064688852
+            ]
+          ],
+          "bytes": 402724,
+          "sha256": "4c54c3dbc4939133f087e032aad7652ad1ced49b190ab106461af7b63bdd0a7e"
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/asymmetric_06_lod2.glb",
+          "triangles": 1012,
+          "branches_triangles": 328,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -3.0085860146353482,
+              -0.013153236359357834,
+              -3.3383088121013063
+            ],
+            [
+              3.0033671834320863,
+              10.49684360541854,
+              2.7411101658738204
+            ]
+          ],
+          "bytes": 292804,
+          "sha256": "ea4c1d65a7dfab0cf54634e98eb8a3e419166844ae9f58f0203ff3466c64a0e7"
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/asymmetric_06_lod3.glb",
+          "triangles": 266,
+          "branches_triangles": 50,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -3.063208540829235,
+              -0.017933662980794907,
+              -3.2015358958718316
+            ],
+            [
+              3.021168492672781,
+              10.401084834956297,
+              2.6427531578573396
+            ]
+          ],
+          "bytes": 261124,
+          "sha256": "3699116fda0920112ec6584cc127d2327ab1307c83dc789c4b9b0d7e4eb6c61c"
+        }
+      ]
+    },
+    {
+      "id": "upright_02_native_base_T016494",
+      "seed": 20262119,
+      "parameters": {
+        "id": "upright_02",
+        "height": 11.5,
+        "width": 0.72,
+        "clear": 3.8,
+        "limbs": 16,
+        "lean": 0.22,
+        "leaf": [
+          119,
+          147,
+          70
+        ]
+      },
+      "bounds": [
+        [
+          -2.531747579574585,
+          0.0,
+          -2.2611002922058105
+        ],
+        [
+          2.7701008319854736,
+          12.911229133605957,
+          2.176546812057495
+        ]
+      ],
+      "height": 12.911229133605957,
+      "width_x": 5.301848253242721,
+      "width_z": 4.4376470481343855,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/native_root_extensions/upright_02_native_base_T016494_lod0.glb",
+          "triangles": 84608,
+          "branches_triangles": 16016,
+          "leaf_triangles": 68592,
+          "leaves": 5716,
+          "bounds": [
+            [
+              -2.531747579574585,
+              0.0,
+              -2.2611002922058105
+            ],
+            [
+              2.7701008319854736,
+              12.911229133605957,
+              2.176546812057495
+            ]
+          ],
+          "bytes": 3722696,
+          "sha256": "c5c4a663c52be11392c1409a064eadcd660faf09693bae70a1d7d663c7297d0c",
+          "native_lower_trunk_triangles": 24,
+          "base_asset": "assets/vegetation/upright_02_lod0.glb",
+          "base_asset_sha256": "1788fd3cfb47c60deafc99950358833c939520115e9004ace0245e6c300b5bad",
+          "preserved_upper_geometry_max_world_error_u": 2.450180053056883e-07,
+          "original_normals_colors_indices_unchanged": true
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/native_root_extensions/upright_02_native_base_T016494_lod1.glb",
+          "triangles": 3936,
+          "branches_triangles": 1596,
+          "leaf_triangles": 2340,
+          "leaves": 390,
+          "bounds": [
+            [
+              -2.5056469925912115,
+              0.0,
+              -2.2338502738000297
+            ],
+            [
+              2.7185403566725013,
+              12.874220231917977,
+              2.1334576896122464
+            ]
+          ],
+          "bytes": 407436,
+          "sha256": "2471c9abd0ee47ee588697782614863df9c0ace6fcad2e00e25b1419a69ef237",
+          "native_lower_trunk_triangles": 18,
+          "base_asset": "assets/vegetation/upright_02_lod1.glb",
+          "base_asset_sha256": "02f3f4cd8c78b1dd52487124e7a32e1debc9199d33d3ec900cbe287cafea6aab",
+          "preserved_upper_geometry_max_world_error_u": 2.450180053056883e-07,
+          "original_normals_colors_indices_unchanged": true
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/native_root_extensions/upright_02_native_base_T016494_lod2.glb",
+          "triangles": 1046,
+          "branches_triangles": 362,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -2.320150506610276,
+              0.0,
+              -2.158071857321877
+            ],
+            [
+              2.7025023598833156,
+              12.84394290544617,
+              2.0618765451856884
+            ]
+          ],
+          "bytes": 295352,
+          "sha256": "68ab518b0cfa1fc1f63f6f2746fe8b822893c47f264a46eac909771e9ea588bd",
+          "native_lower_trunk_triangles": 14,
+          "base_asset": "assets/vegetation/upright_02_lod2.glb",
+          "base_asset_sha256": "0e659c069039f2401bcbb40caba3b67bc839ef70a17d889ca5c0af6ac9753125",
+          "preserved_upper_geometry_max_world_error_u": 2.450180053056883e-07,
+          "original_normals_colors_indices_unchanged": true
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/native_root_extensions/upright_02_native_base_T016494_lod3.glb",
+          "triangles": 284,
+          "branches_triangles": 68,
+          "leaf_triangles": 216,
+          "leaves": 36,
+          "bounds": [
+            [
+              -2.1713160916928826,
+              0.0,
+              -2.04443326209591
+            ],
+            [
+              2.645619750891246,
+              12.681336670375405,
+              2.1179446985683756
+            ]
+          ],
+          "bytes": 263096,
+          "sha256": "c344a4417ef23e35a366230a3224d9a3982efcfefca03004a4cbb5ff6b4edf01",
+          "native_lower_trunk_triangles": 10,
+          "base_asset": "assets/vegetation/upright_02_lod3.glb",
+          "base_asset_sha256": "1669716f0b4b647d02bb0a47be17ef8652737db8aa9eaff27456a562c289080b",
+          "preserved_upper_geometry_max_world_error_u": 2.450180053056883e-07,
+          "original_normals_colors_indices_unchanged": true
+        }
+      ],
+      "native_root_extension": {
+        "owner_id": "T016494",
+        "base_variant": "upright_02",
+        "translation_y_local_u": 1.1755578021771331,
+        "extension_world_u": 1.0,
+        "source_evidence": "evidence/vegetation/NATIVE_LOWER_TRUNK_ROOTS.json",
+        "source_evidence_sha256": "74c5e3e8506a542665619885a5e8dd87375fa19a5fe92b6a042622b52d79ac98"
+      },
+      "eligible_for_distribution_assignment": false
+    },
+    {
+      "id": "open_04_native_base_T016717",
+      "seed": 20264137,
+      "parameters": {
+        "id": "open_04",
+        "height": 10.7,
+        "width": 0.92,
+        "clear": 3.2,
+        "limbs": 13,
+        "lean": 0.65,
+        "leaf": [
+          117,
+          146,
+          67
+        ]
+      },
+      "bounds": [
+        [
+          -4.719589625498817,
+          0.0,
+          -3.7939122072377836
+        ],
+        [
+          3.129321134429854,
+          15.759391089651992,
+          2.5489533985881567
+        ]
+      ],
+      "height": 15.759391089651992,
+      "width_x": 6.636076205678286,
+      "width_z": 5.180507528449773,
+      "assets": [
+        {
+          "lod": 0,
+          "asset": "assets/vegetation/native_root_extensions/open_04_native_base_T016717_lod0.glb",
+          "triangles": 103348,
+          "branches_triangles": 31528,
+          "leaf_triangles": 71820,
+          "leaves": 5985,
+          "bounds": [
+            [
+              -4.719589625498817,
+              0.0,
+              -3.7939122072377836
+            ],
+            [
+              3.129321134429854,
+              15.759391089651992,
+              2.5489533985881567
+            ]
+          ],
+          "bytes": 4388040,
+          "sha256": "f7e6165c857ebce44bc581e600b8d25ae2892137ec123889a457992cee7c4d22",
+          "native_lower_trunk_triangles": 72,
+          "source_constrained_crown": true,
+          "source_world_part_bounds": [
+            [
+              [
+                -830.561,
+                0.0,
+                496.43899999999996
+              ],
+              [
+                -830.081,
+                3.0,
+                496.919
+              ]
+            ],
+            [
+              [
+                -833.7029062570889,
+                2.9330210000507,
+                494.2233630484903
+              ],
+              [
+                -828.1886489440482,
+                10.809840263487954,
+                498.8113182666611
+              ]
+            ],
+            [
+              [
+                -833.8086121916637,
+                3.2183530355471803,
+                494.1844406650632
+              ],
+              [
+                -828.1355603080374,
+                10.89635818720718,
+                498.8783893220858
+              ]
+            ]
+          ]
+        },
+        {
+          "lod": 1,
+          "asset": "assets/vegetation/native_root_extensions/open_04_native_base_T016717_lod1.glb",
+          "triangles": 5202,
+          "branches_triangles": 2880,
+          "leaf_triangles": 2322,
+          "leaves": 387,
+          "bounds": [
+            [
+              -4.590200853387072,
+              0.0,
+              -3.793940305709839
+            ],
+            [
+              2.9397196769714355,
+              15.739921906978594,
+              2.523027838669481
+            ]
+          ],
+          "bytes": 445836,
+          "sha256": "7a3622e6e01c773cfb1398fbd6cc5ffdffab86bf5e4d53409804951ec5b99287",
+          "native_lower_trunk_triangles": 54,
+          "source_constrained_crown": true,
+          "source_world_part_bounds": [
+            [
+              [
+                -830.557353860723,
+                0.0,
+                496.43899999999996
+              ],
+              [
+                -830.0846461392771,
+                3.0,
+                496.9045262289886
+              ]
+            ],
+            [
+              [
+                -833.3393751840174,
+                2.931339835791281,
+                494.3265620745049
+              ],
+              [
+                -828.3271849304623,
+                10.672940335414253,
+                498.34049469327476
+              ]
+            ],
+            [
+              [
+                -833.648249043174,
+                3.090797071667427,
+                494.375514220731
+              ],
+              [
+                -828.1706640287484,
+                10.882237500451403,
+                498.9241327393944
+              ]
+            ]
+          ]
+        },
+        {
+          "lod": 2,
+          "asset": "assets/vegetation/native_root_extensions/open_04_native_base_T016717_lod2.glb",
+          "triangles": 1284,
+          "branches_triangles": 600,
+          "leaf_triangles": 684,
+          "leaves": 114,
+          "bounds": [
+            [
+              -4.567151962184208,
+              0.0,
+              -3.792966365814209
+            ],
+            [
+              2.939115524291992,
+              15.750270953036082,
+              2.376342292759746
+            ]
+          ],
+          "bytes": 304588,
+          "sha256": "c26db70907b00f8eb4e398486ea42c8f3efe42024c0f646a66de7e0d0945edc3",
+          "native_lower_trunk_triangles": 28,
+          "source_constrained_crown": true,
+          "source_world_part_bounds": [
+            [
+              [
+                -830.5549826989237,
+                0.0,
+                496.43899999999996
+              ],
+              [
+                -830.0870173010763,
+                3.0,
+                496.89523252829656
+              ]
+            ],
+            [
+              [
+                -833.3393650137895,
+                2.9309926812359137,
+                494.3265620745049
+              ],
+              [
+                -828.327525644107,
+                10.670979927477433,
+                498.34039495894365
+              ]
+            ],
+            [
+              [
+                -833.8776838890964,
+                3.1046911824903223,
+                494.12380032193295
+              ],
+              [
+                -828.0684224160161,
+                10.896744527418138,
+                498.6813896533745
+              ]
+            ]
+          ]
+        },
+        {
+          "lod": 3,
+          "asset": "assets/vegetation/native_root_extensions/open_04_native_base_T016717_lod3.glb",
+          "triangles": 346,
+          "branches_triangles": 148,
+          "leaf_triangles": 198,
+          "leaves": 33,
+          "bounds": [
+            [
+              -4.161512410013173,
+              0.0,
+              -3.3031403117661244
+            ],
+            [
+              2.9375202655792236,
+              15.430855751037598,
+              2.3840870386956023
+            ]
+          ],
+          "bytes": 266316,
+          "sha256": "1a90ea75c39fa33dc99a06674f66a78e8071be3b6432901cc837d4c4a4432f90",
+          "native_lower_trunk_triangles": 10,
+          "source_constrained_crown": true,
+          "source_world_part_bounds": [
+            [
+              [
+                -830.5492535639108,
+                0.0,
+                496.43899999999996
+              ],
+              [
+                -830.0927464360892,
+                3.0,
+                496.87316407864995
+              ]
+            ],
+            [
+              [
+                -833.0051784035596,
+                2.9646272608341793,
+                494.99312462758456
+              ],
+              [
+                -828.327525644107,
+                10.669202587202044,
+                497.68369822766624
+              ]
+            ],
+            [
+              [
+                -832.9261028514243,
+                3.2874334928762354,
+                494.81828129710124
+              ],
+              [
+                -828.0893479615455,
+                10.85560482121795,
+                498.55240604979343
+              ]
+            ]
+          ]
+        }
+      ],
+      "eligible_for_distribution_assignment": false,
+      "native_root_extension": {
+        "owner_id": "T016717",
+        "base_variant": "open_04",
+        "translation_y_local_u": 0.0,
+        "extension_world_u": 3.0,
+        "source_evidence": "evidence/vegetation/NATIVE_T016717_CROWN_CONSTRAINTS.json",
+        "source_evidence_sha256": "19cf59475b686cf7f97be69f5b2c551bc09b37204822bd2c3b33f339edb3ee36"
+      },
+      "native_crown_clearance": {
+        "source_contract": "evidence/vegetation/NATIVE_T016717_CROWN_CONSTRAINTS.json",
+        "source_contract_sha256": "19cf59475b686cf7f97be69f5b2c551bc09b37204822bd2c3b33f339edb3ee36",
+        "native_trunk_top_y": 6.0,
+        "native_soffit_y": 7.0,
+        "source_leaf_bbox": [
+          [
+            -834.0,
+            3.0,
+            494.0
+          ],
+          [
+            -828.0,
+            11.0,
+            499.0
+          ]
+        ],
+        "main_stem_height_source_u": 6.0,
+        "main_stem_base_radius_source_u": 0.24,
+        "construction": "INFERRED_NATURAL_BRANCHES_ROUTED_AROUND_EXACT_NATIVE_UPPER_COVER",
+        "primary_branches": 16,
+        "terminal_twigs": 432,
+        "procedural_leaf_count": 6651,
+        "shared_curved_leader_count": 2,
+        "shared_curved_leader_quality": [
+          {
+            "clear_side": 0,
+            "points": [
+              [
+                -830.321,
+                3.25,
+                496.679
+              ],
+              [
+                -830.7753446352084,
+                3.469315768635496,
+                496.69420149011967
+              ],
+              [
+                -831.1539566281539,
+                3.724707554979664,
+                496.71597246517655
+              ],
+              [
+                -831.462631681244,
+                4.01234207968902,
+                496.74327696793017
+              ],
+              [
+                -831.7071654968867,
+                4.328386063420077,
+                496.77507904114026
+              ],
+              [
+                -831.8933537774897,
+                4.669006226829356,
+                496.8103427275671
+              ],
+              [
+                -832.0269922254616,
+                5.030369290573373,
+                496.84803206997077
+              ],
+              [
+                -832.11387654321,
+                5.408641975308643,
+                496.88711111111115
+              ],
+              [
+                -832.1598024331427,
+                5.799991001691684,
+                496.92654389374803
+              ],
+              [
+                -832.1705655976675,
+                6.200583090379008,
+                496.9652944606413
+              ],
+              [
+                -832.151961739193,
+                6.6065849620271395,
+                497.0023268545513
+              ],
+              [
+                -832.1097865601267,
+                7.014163337292589,
+                497.03660511823773
+              ],
+              [
+                -832.0498357628767,
+                7.419484936831877,
+                497.0670932944607
+              ],
+              [
+                -831.9779050498506,
+                7.818716481301516,
+                497.09275542597993
+              ],
+              [
+                -831.8997901234568,
+                8.208024691358025,
+                497.11255555555545
+              ],
+              [
+                -831.8212866861031,
+                8.583576287657921,
+                497.1254577259475
+              ],
+              [
+                -831.7481904401972,
+                8.941537990857718,
+                497.13042597991574
+              ],
+              [
+                -831.6862970881473,
+                9.278076521613936,
+                497.12642436022026
+              ],
+              [
+                -831.6414023323614,
+                9.58935860058309,
+                497.11241690962095
+              ],
+              [
+                -831.6193018752474,
+                9.871550948421696,
+                497.0873676708778
+              ],
+              [
+                -831.6257914192131,
+                10.120820285786273,
+                497.0502406867509
+              ],
+              [
+                -831.6666666666666,
+                10.333333333333334,
+                497.0
+              ]
+            ],
+            "maximum_adjacent_tangent_angle_degrees": 10.311140547552872,
+            "source_endpoint": [
+              -831.6666666666666,
+              10.333333333333334,
+              497.0
+            ],
+            "endpoint_basis": "EXACT_NATIVE_LEAF_TRIANGLE_CENTRE"
+          },
+          {
+            "clear_side": 1,
+            "points": [
+              [
+                -830.321,
+                3.52,
+                496.679
+              ],
+              [
+                -830.1433322535361,
+                3.7164093150487703,
+                496.84198970593513
+              ],
+              [
+                -829.9867464636649,
+                3.954222366195155,
+                496.98145279487454
+              ],
+              [
+                -829.8497259475222,
+                4.229173955296406,
+                497.0992730806609
+              ],
+              [
+                -829.7307540222438,
+                4.536998884209768,
+                497.1973343771371
+              ],
+              [
+                -829.6283140049669,
+                4.8734319547924985,
+                497.27752049814626
+              ],
+              [
+                -829.540889212828,
+                5.234207968901847,
+                497.34171525753163
+              ],
+              [
+                -829.4669629629631,
+                5.615061728395062,
+                497.3918024691359
+              ],
+              [
+                -829.4050185725084,
+                6.011728035129396,
+                497.42966594680206
+              ],
+              [
+                -829.3535393586004,
+                6.419941690962099,
+                497.4571895043731
+              ],
+              [
+                -829.3110086383759,
+                6.835437497750423,
+                497.4762569556924
+              ],
+              [
+                -829.2759097289711,
+                7.253950257351617,
+                497.4887521146025
+              ],
+              [
+                -829.2467259475219,
+                7.671214771622935,
+                497.4965587949467
+              ],
+              [
+                -829.2219406111651,
+                8.082965842421626,
+                497.50156081056764
+              ],
+              [
+                -829.200037037037,
+                8.484938271604937,
+                497.5056419753086
+              ],
+              [
+                -829.1794985422741,
+                8.872866861030126,
+                497.5106861030127
+              ],
+              [
+                -829.1588084440125,
+                9.242486412554438,
+                497.5185770075226
+              ],
+              [
+                -829.1364500593888,
+                9.589531728035128,
+                497.5311985026815
+              ],
+              [
+                -829.1109067055394,
+                9.909737609329445,
+                497.55043440233237
+              ],
+              [
+                -829.0806616996003,
+                10.19883885829464,
+                497.5781685203182
+              ],
+              [
+                -829.0441983587085,
+                10.452570276787963,
+                497.616284670482
+              ],
+              [
+                -829.0,
+                10.666666666666666,
+                497.6666666666667
+              ]
+            ],
+            "maximum_adjacent_tangent_angle_degrees": 9.448609260678838,
+            "source_endpoint": [
+              -829.0,
+              10.666666666666666,
+              497.6666666666667
+            ],
+            "endpoint_basis": "EXACT_NATIVE_LEAF_TRIANGLE_CENTRE"
+          }
+        ],
+        "morphology_revision": "SHARED_CUBIC_LEADERS_WITH_ALTERNATING_MID_CROWN_SHOOTS",
+        "replaces_generic_upper_shape_preservation": true
+      }
+    }
+  ],
+  "vertex_colors_linear": true,
+  "vertex_normals_included": true,
+  "editable_library": "assets/vegetation/NATURAL_TREES.blend",
+  "lod_distances_m": [
+    30,
+    113,
+    263
+  ],
+  "license": "Generated for this project; source code and procedural texture included.",
+  "identity": "Temperate broadleaf morphology inferred from campus references; no individual species identification."
+}
