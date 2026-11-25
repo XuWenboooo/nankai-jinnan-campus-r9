@@ -5,7 +5,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {Sky} from 'three/addons/objects/Sky.js';
 import {createSceneStreamer} from './scene_stream.js?v=r9-fast-1';
 import {finishCommercialPaving} from './commercial_paving.js';
-import {createLibraryLighting} from './library_lighting.js';
+import {createLibraryLighting} from './library_lighting.js?v=r9-fast-2';
 import {attachDormPlanting} from './dorm_planting.js';
 import {createRoadLighting} from './road_lighting.js';
 import {createLandscapeDetail,installTurfMaterial} from './landscape_detail.js';
@@ -22,8 +22,8 @@ import {loadWalkWater} from './walk_water.js';
 import {addAcademicEntranceIdentity,attachAcademicThresholds} from './academic_identity.js';
 import {correctedPavingHeight,fixPavingMesh} from './paving_grades.js';
 import {createMinimap} from './minimap.js';
-import {createDuskSky} from './dusk_sky.js';
-import {attachStreamingLOD,readStreamingLOD} from './streaming_lod.js?v=r9-fast-1';
+import {createDuskSky} from './dusk_sky.js?v=r9-fast-2';
+import {attachStreamingLOD,readStreamingLOD} from './streaming_lod.js?v=r9-fast-2';
 import {restoreScienceCanalBridge} from './source_bridge.js';
 import {restoreScience5Hardscape} from './source_passage_hardscape.js';
 import {attachReviewGround} from './review_ground.js';
@@ -540,22 +540,42 @@ function updateTrees(){
 async function loadSurfacePbr(){
  const config=await json('world/pbr_surface_materials.json');
  const source=await json(config.source_manifest);
- const loader=new THREE.TextureLoader();
- await Promise.all(Object.entries(config.bindings).map(async ([materialName,sourceId])=>{
+ const pictures=[];
+ for(const [materialName,sourceId] of Object.entries(config.bindings)){
   const record=source.materials.find(item=>item.id===sourceId);
   if(!record)throw Error('Missing PBR material source '+sourceId);
-  const textures=await Promise.all(['albedo','normal_gl','roughness'].map(async role=>{
-   const texture=await loader.loadAsync('../'+record.maps[role].path);
+  const textures=['albedo','normal_gl','roughness'].map(role=>{
+   const texture=new THREE.Texture();
    texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
    texture.repeat.set(config.uv_source_units_per_repeat*scale/record.tile_m[0],config.uv_source_units_per_repeat*scale/record.tile_m[1]);
    texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
    texture.colorSpace=role==='albedo'?THREE.SRGBColorSpace:THREE.NoColorSpace;
+   const file=record.maps[role].path;
+   pictures.push(new Promise((resolve,reject)=>{
+    const image=new Image();
+    image.crossOrigin='anonymous';
+    image.fetchPriority='low';
+    image.onload=()=>{
+     texture.image=image;
+     texture.needsUpdate=true;
+     renderer.shadowMap.needsUpdate=true;
+     waterRenderer?.invalidate();
+     resolve();
+    };
+    image.onerror=()=>reject(Error('材质图片读取失败 '+file));
+    image.src='../'+file;
+   }));
    return texture;
-  }));
+  });
   surfacePbr.set(materialName,{record,textures,uses:0,tint:config.base_tint_srgb||[1,1,1]});
- }));
+ }
+ return {ready:Promise.all(pictures).then(()=>true,error=>{
+  failures.push(String(error));
+  $('error').textContent=failures.at(-1);
+  console.error(error);
+  return false;
+ })};
 }
-
 function bindRebuiltGrass(material,kind){
  const {record,textures}=surfacePbr.get('grass');
  material.color.set(kind==='grove'?'#dce9d4':'#f8faec');
@@ -757,7 +777,7 @@ async function boot(){
  const waterTask=read('world/r9_waterfront.json').then(config=>Promise.all(
   ['assets/materials/water_ripple_normal.png',config.atlas.file].map(file=>textureLoader.loadAsync('../'+file))
  ));
- const [worldData,elevation,walks,trees,water,wetPaths,flowers,streamIndex,lodData]=await Promise.all([
+ const [worldData,elevation,walks,trees,water,wetPaths,flowers,streamIndex,lodData,surfaceDetails]=await Promise.all([
   Promise.all(data.values()),heightTask,walksTask,treesTask,waterTask,loadWalkWater(),
   loadFlowerProfiles(),eagerMode?null:json('world/streaming_assets.json'),eagerMode?null:readStreamingLOD(),
   framesTask,loadMicrodetail(),
@@ -889,7 +909,11 @@ async function boot(){
   $('boot-poster').hidden=true;
   performance.mark('campus:first-scene');
  };
- let treesReady=false;
+ let treesReady=false,surfaceTexturesReady=false;
+ surfaceDetails.ready.then(complete=>{
+  surfaceTexturesReady=complete;
+  streamer?.refresh();
+ });
  const loadItems=eagerMode?manifest.assets.map(a=>({...a,type:'scene'})):[];
  for(const form of treeForms)for(const item of form.assets)
   treeAssetIndex.set(form.id+'_'+item.lod,{...item,form:form.id,type:'tree'});
@@ -924,7 +948,7 @@ async function boot(){
   treesReady=true;
  }
  if(eagerMode){
-  await loadTemplates();
+  await Promise.all([loadTemplates(),surfaceDetails.ready]);
   placeTrees();
   sceneInitialized=true;
   await renderer.compileAsync(scene,camera);
@@ -938,7 +962,7 @@ async function boot(){
   let geometryRevision=0,priming=null,warmed=false;
   const visibleFootprints=streamIndex.assets.filter(item=>!['surface','ground_flora'].includes(item.kind)||
    satelliteSite.footprintInCampus(...item.bounds));
-  const proxies=attachStreamingLOD(lodData,visibleFootprints,world,satelliteSite,terrainY);
+  const proxies=attachStreamingLOD(lodData,visibleFootprints,world,satelliteSite,terrainY,libraryLighting.outlineMaterial);
   const missing=visibleFootprints.filter(item=>['building','surface'].includes(item.kind)&&!proxies.has(item.id));
   if(missing.length)throw Error('轮廓资源缺失 '+missing.map(item=>item.id).join(', '));
   streamer=createSceneStreamer({camera,world,items:visibleFootprints,proxies,scale,load:loadSceneItem,dispose:disposeSceneItem,
@@ -948,7 +972,7 @@ async function boot(){
     waterRenderer.invalidate();
    }
    geometryRevision=state.revision;
-   const ready=treesReady&&state.missingStructural.length===0&&state.nearbyMissing===0&&state.failures.length===0&&failures.length===0;
+   const ready=treesReady&&surfaceTexturesReady&&state.missingStructural.length===0&&state.nearbyMissing===0&&state.failures.length===0&&failures.length===0;
    if(ready&&!priming)priming=prewarmSurroundings().then(()=>{warmed=true;}).catch(error=>{
     failures.push(String(error));console.error(error);
    });
@@ -987,7 +1011,7 @@ function applySkyBrightness(){
  const dusk=libraryLighting.state().dusk;
  scene.backgroundIntensity=(dusk?.78:.85)*sky;
  duskSky.setMode(dusk,sky);
- hemisphere.intensity=(dusk?.55:1.25)*(.60+.40*sky);
+ hemisphere.intensity=(dusk?.42:1.25)*(.60+.40*sky);
  $('sky-brightness').value=String(skyPercent);
  $('sky-value').value=skyPercent+'%';
 }
@@ -1067,8 +1091,8 @@ addEventListener('resize',()=>{
  renderer.setSize(innerWidth,innerHeight);
  streamer?.refresh();
 });
-window.campus={ready:false,setView,enterWalk,moveWalk,groundY,walkGroundY:(x,z)=>groundY(x,z,(camera.position.y-EYE_HEIGHT+STEP_UP)/scale),terrainY,blocked,renderer,scene,camera,world,controls,scale:()=>scale,streamReport:()=>streamer?.report()??null,landscapeState:()=>landscape?.state(),axisPlantingState:()=>axisPlanting?.state(),flowerProfileState:()=>flowerProfiles?.state(),waterState:()=>({...waterRenderer?.state(),shore:waterfront?.state(),finish:waterfrontFinish?.state()}),navigationState:()=>({walking,grounded:walkOnGround,verticalSpeed:walkVerticalSpeed,wetMaskResolution:walkWater?.resolution}),satelliteState:()=>satelliteSite?.state(),cultureValleyState:()=>cultureValley?.state(),treeUpdateReport:()=>({...treeUpdates}),lightingState:()=>({...libraryLighting.state(),roadLights:roadLighting.state(),skyPercent,skyIntensity:scene.backgroundIntensity}),
- report:()=>({version:'NKU-NONVOXEL-R9-DORMITORY-AND-NAVIGATION',surfacePbr:[...surfacePbr].map(([material,value])=>({material,source:value.record.id,tile_m:value.record.tile_m,normal_strength:value.record.normal_scale_initial_inferred,mesh_uses:value.uses,textures:value.textures.map(t=>({dimensions:[t.image.width,t.image.height],colorSpace:t.colorSpace,repeat:t.repeat.toArray()}))})),targetRenderFPS,walkSurfaceTriangles:walkSurfaceCount,ready:window.campus.ready,assets:[...loadedAssets],failures,trees:treeInstances.length,placedTreeInstances:treeSlots.size,nodes:world.children.filter(n=>!n.name.startsWith('VEG_')).map(n=>n.name),position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,cameraMatrix:camera.matrixWorld.toArray(),projectionMatrix:camera.projectionMatrix.toArray(),scale,rootMatrix:world.matrixWorld.toArray(),lighting:{sunIntensity:sun.intensity,hemisphereIntensity:hemisphere.intensity,environmentIntensity:scene.environmentIntensity,exposure:renderer.toneMappingExposure,shadows:renderer.shadowMap.enabled,shadowSize:2048,fog:false},draw:renderer.info.render,memory:renderer.info.memory,frames:frameSamples.slice(-15000),route:activeRoute?{id:activeRoute.id,index:activeRoute.index,distance:activeRoute.distance,blockedFrames:activeRoute.blockedFrames,elapsed:(performance.now()-activeRoute.started)/1000}:null}),
+window.campus={ready:false,setView,enterWalk,moveWalk,groundY,walkGroundY:(x,z)=>groundY(x,z,(camera.position.y-EYE_HEIGHT+STEP_UP)/scale),terrainY,blocked,renderer,scene,camera,world,controls,scale:()=>scale,streamReport:()=>streamer?.report()??null,landscapeState:()=>landscape?.state(),axisPlantingState:()=>axisPlanting?.state(),flowerProfileState:()=>flowerProfiles?.state(),waterState:()=>({...waterRenderer?.state(),shore:waterfront?.state(),finish:waterfrontFinish?.state()}),navigationState:()=>({walking,grounded:walkOnGround,verticalSpeed:walkVerticalSpeed,wetMaskResolution:walkWater?.resolution}),satelliteState:()=>satelliteSite?.state(),cultureValleyState:()=>cultureValley?.state(),treeUpdateReport:()=>({...treeUpdates}),lightingState:()=>({...libraryLighting.state(),roadLights:roadLighting.state(),skyPercent,skyIntensity:scene.backgroundIntensity,nightSky:duskSky.state()}),
+ report:()=>({version:'NKU-NONVOXEL-R9-DORMITORY-AND-NAVIGATION',surfacePbr:[...surfacePbr].map(([material,value])=>({material,source:value.record.id,tile_m:value.record.tile_m,normal_strength:value.record.normal_scale_initial_inferred,mesh_uses:value.uses,textures:value.textures.map(t=>({dimensions:[t.image?.width??0,t.image?.height??0],colorSpace:t.colorSpace,repeat:t.repeat.toArray()}))})),targetRenderFPS,walkSurfaceTriangles:walkSurfaceCount,ready:window.campus.ready,assets:[...loadedAssets],failures,trees:treeInstances.length,placedTreeInstances:treeSlots.size,nodes:world.children.filter(n=>!n.name.startsWith('VEG_')).map(n=>n.name),position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,cameraMatrix:camera.matrixWorld.toArray(),projectionMatrix:camera.projectionMatrix.toArray(),scale,rootMatrix:world.matrixWorld.toArray(),lighting:{sunIntensity:sun.intensity,hemisphereIntensity:hemisphere.intensity,environmentIntensity:scene.environmentIntensity,exposure:renderer.toneMappingExposure,shadows:renderer.shadowMap.enabled,shadowSize:2048,fog:false},draw:renderer.info.render,memory:renderer.info.memory,frames:frameSamples.slice(-15000),route:activeRoute?{id:activeRoute.id,index:activeRoute.index,distance:activeRoute.distance,blockedFrames:activeRoute.blockedFrames,elapsed:(performance.now()-activeRoute.started)/1000}:null}),
  setShadows:enabled=>{renderer.shadowMap.enabled=!!enabled;sun.castShadow=!!enabled;world.traverse(n=>{if(n.material)for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.needsUpdate=true;});renderer.shadowMap.needsUpdate=true;},
  startRoute,stopRoute:()=>{activeRoute=null;},
  instanceNodes:()=>Object.fromEntries(treeSlots),

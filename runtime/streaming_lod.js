@@ -17,7 +17,7 @@ export async function readStreamingLOD(){
  return {meta,decoded,atlas};
 }
 
-export function attachStreamingLOD({meta,decoded,atlas},items,world,satelliteSite,terrainY){
+export function attachStreamingLOD({meta,decoded,atlas},items,world,satelliteSite,terrainY,outlineMaterial){
  const models=new Map();
  atlas.colorSpace=THREE.SRGBColorSpace;
  atlas.flipY=false;
@@ -73,13 +73,21 @@ export function attachStreamingLOD({meta,decoded,atlas},items,world,satelliteSit
    geometry.setAttribute('color',new THREE.BufferAttribute(rgb,3,true));
    geometry.setIndex(new THREE.BufferAttribute(indices.slice(),1));
    geometry.computeVertexNormals();
-   parts.push(geometry);
+   const litWindow=outlineMaterial(part.material);
+   if(litWindow){
+    geometry.computeBoundingSphere();
+    group.add(new THREE.Mesh(geometry,litWindow));
+   }else parts.push(geometry);
   }
-  const geometry=parts.length===1?parts[0]:mergeGeometries(parts);
-  if(parts.length>1)parts.forEach(part=>part.dispose());
-  if(!geometry?.index?.count)continue;
-  geometry.computeBoundingSphere();
-  group.add(new THREE.Mesh(geometry,buildingMaterial));
+  if(parts.length){
+   const geometry=parts.length===1?parts[0]:mergeGeometries(parts);
+   if(parts.length>1)parts.forEach(part=>part.dispose());
+   if(geometry?.index?.count){
+    geometry.computeBoundingSphere();
+    group.add(new THREE.Mesh(geometry,buildingMaterial));
+   }
+  }
+  if(!group.children.length)continue;
   world.add(group);
   models.set(item.id,group);
  }

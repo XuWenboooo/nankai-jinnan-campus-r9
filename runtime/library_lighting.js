@@ -3,7 +3,7 @@ import * as THREE from 'three';
 function twilightSky(){
  const width=256,height=128;
  const data=new Uint8Array(width*height*4);
- const horizon=[167,185,192], zenith=[58,94,131], below=[107,122,139];
+ const horizon=[29,37,52], zenith=[9,14,26], below=[20,26,38];
  for(let y=0;y<height;y++){
   const elevation=y/(height-1)*2-1;
   const target=elevation>=0?zenith:below;
@@ -24,6 +24,11 @@ export function createLibraryLighting(scene, world, sun, hemisphere, renderer) {
  const dayBackground=scene.background;
  const duskBackground=twilightSky();
  const windowLight={value:0};
+ const outlineWindows=new Map();
+ const outlineLevels=new Map([
+  ['Library_Wing_Glass',.48],['Library_Reading_Glass',.96],
+  ['Library_Entry_Glass',.43],['Library_Shelter_Fixture',1.10],
+ ]);
  const fixtures=new THREE.Group();
  const poles=new THREE.Group();
  poles.name='LIBRARY_PLAZA_MODELED_LAMPS';
@@ -64,6 +69,18 @@ export function createLibraryLighting(scene, world, sun, hemisphere, renderer) {
   }
  }
 
+ function outlineMaterial(name){
+  const level=outlineLevels.get(name);
+  if(level===undefined)return null;
+  if(!outlineWindows.has(name)){
+   const material=new THREE.MeshLambertMaterial({name:'LOD_'+name,vertexColors:true});
+   material.emissive.setRGB(1,.56,.18);
+   material.emissiveIntensity=dusk?level:0;
+   outlineWindows.set(name,material);
+  }
+  return outlineWindows.get(name);
+ }
+
  function refreshGlare(material){
   const {libraryDayColor,libraryDuskColor,libraryGrayBlue,libraryConnectGlazing}=material.userData;
   material.envMapIntensity=dusk?(libraryConnectGlazing?.06:.009):(libraryGrayBlue?.065:.13);
@@ -93,7 +110,7 @@ export function createLibraryLighting(scene, world, sun, hemisphere, renderer) {
     .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
       vec2 meters=(nkuLibraryPosition.xy+vec2(84.5,-2.0))*${scale.toFixed(8)};
       float glow;
-      ${kind===1?'glow=.86;':kind===0?'glow=.39;':kind===2?'glow=mix(.34,.52,1.0-smoothstep(10.0,20.0,abs(meters.x)));':kind===4?'glow=1.10;':upperConnect?'glow=0.;':'glow=.22;'}
+      ${kind===1?'glow=.96;':kind===0?'glow=.48;':kind===2?'glow=mix(.34,.52,1.0-smoothstep(10.0,20.0,abs(meters.x)));':kind===4?'glow=1.10;':upperConnect?'glow=.18;':'glow=.22;'}
       totalEmissiveRadiance+=vec3(1.0,.56,.18)*glow*nkuWindowLight;
     `);
   };
@@ -106,11 +123,13 @@ export function createLibraryLighting(scene, world, sun, hemisphere, renderer) {
   scene.background=dusk?duskBackground:dayBackground;
   hemisphere.color.set(dusk?'#c1dcf8':'#e5f2ff');
   hemisphere.groundColor.set(dusk?'#797f90':'#a2a591');
-  hemisphere.intensity=dusk?.55:1.25;
+  hemisphere.intensity=dusk?.42:1.25;
   sun.color.set(dusk?'#ffc99a':'#fff4de');
-  sun.intensity=dusk?.28:2.5;
+  sun.intensity=dusk?.14:2.5;
   renderer.toneMappingExposure=dusk?1.06:1;
   windowLight.value=dusk?1:0;
+  for(const [name,material] of outlineWindows)
+   material.emissiveIntensity=dusk?outlineLevels.get(name):0;
   world.traverse(node=>{if(node.material?.userData?.libraryDayColor)refreshGlare(node.material);});
   if(!dusk)fixtures.visible=false;
   renderer.shadowMap.needsUpdate=true;
@@ -125,6 +144,6 @@ export function createLibraryLighting(scene, world, sun, hemisphere, renderer) {
   fixtures.visible=dusk&&nearby;
  }
 
- return {addFixtures,bindWindow,useDusk,update,state:()=>({dusk,plazaLights:fixtures.visible?fixtures.children.length/2:0})};
+ return {addFixtures,bindWindow,outlineMaterial,useDusk,update,state:()=>({dusk,libraryWindowLight:windowLight.value,plazaLights:fixtures.visible?fixtures.children.length/2:0})};
 }
 

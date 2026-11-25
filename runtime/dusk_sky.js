@@ -23,9 +23,9 @@ float hash2(vec2 grid){
 void main(){
  vec3 d=normalize(skyDirection);
  float elevation=smoothstep(-.06,.66,d.y);
- vec3 horizon=vec3(.053,.069,.094);
- vec3 zenith=vec3(.007,.012,.030);
- float bright=.34+.72*brightness;
+ vec3 horizon=vec3(.012,.020,.037);
+ vec3 zenith=vec3(.0014,.0030,.0085);
+ float bright=.24+.76*brightness;
  vec3 sky=mix(horizon,zenith,elevation)*bright;
  vec2 angular=vec2(atan(d.z,d.x)/PI*.5+.5,asin(clamp(d.y,-1.,1.))/PI+.5);
  vec2 starGrid=angular*vec2(174.,100.);
