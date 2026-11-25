@@ -3,8 +3,13 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>南开津南 · 连续校园</title>
 <link rel="icon" href="data:,">
+<link rel="preload" href="../previews/r9-campus.jpg" as="image" fetchpriority="high">
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font:14px/1.5 system-ui,"Microsoft YaHei",sans-serif;background:#b6d0de;color:#203632}canvas{display:block;width:100%;height:100%}header{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#f9fbf5ed;border:1px solid #b7c9bf;border-radius:7px;padding:9px 12px;z-index:2}h1{font-size:18px;margin:0 15px 0 0;font-weight:650}button,select{font:inherit;border:1px solid #a8beb1;border-radius:4px;padding:5px 9px;background:#f4f8ef;color:#243b32;cursor:pointer}button[aria-pressed=true]{background:#d0e3b6}#load{position:absolute;bottom:18px;left:18px;background:#f9fbf5ec;border:1px solid #b6c5bd;border-radius:6px;padding:10px 14px;max-width:680px}#error{color:#a22c26}#hud{position:absolute;bottom:15px;right:16px;background:#f9fbf5e6;border-radius:5px;padding:6px 10px;font:12px/1.5 monospace}#instructions{color:#566b5f;font-size:12px}a{color:#345d45}.sky-control{display:inline-flex;align-items:center;gap:6px;color:#354c3f}.sky-control input{width:105px;accent-color:#597756}.sky-control output{min-width:3em;font-variant-numeric:tabular-nums}#cross{position:absolute;left:50%;top:50%;display:none;pointer-events:none;color:#fff}
+#boot-poster{position:absolute;inset:0;z-index:1;pointer-events:none;margin:0;background:#b6d0de}
+#boot-poster[hidden]{display:none}
+#boot-poster img{width:100%;height:100%;object-fit:cover;display:block}
+#load,#hud{z-index:2}
 #campus-minimap{position:absolute;right:16px;bottom:51px;width:248px;z-index:2;padding:8px;background:#f9fbf5f5;border:1px solid #afc3b7;border-radius:8px;box-shadow:0 3px 18px #213a312a;color:#203632}
 #campus-minimap[hidden],#campus-map-panel[hidden],#campus-map-marker[hidden]{display:none}
 #campus-minimap .map-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px;font-size:13px;font-weight:650}
@@ -31,17 +36,32 @@
 }
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+<link rel="modulepreload" href="./vendor/three.module.js">
+<link rel="modulepreload" href="./vendor/three.core.js">
 <header><h1>南开津南 · 连续校园</h1><select id="view" aria-label="检查视点"></select><button id="walk" aria-pressed="false">WASD 漫游</button><button id="orbit" aria-pressed="true">自由观察</button><button id="dusk" aria-pressed="false">暮色照明</button><button id="light">诊断日光</button><label class="sky-control" for="sky-brightness">天空明暗 <input id="sky-brightness" type="range" min="20" max="125" step="1" value="100"><output id="sky-value" for="sky-brightness">100%</output></label><button id="source">原体素对照</button><button id="sport">理科球场</button><a href="./library/">图书馆中庭</a><span id="instructions">WASD 平移 · Shift 加速 · 拖动旋转 · 滚轮缩放</span><div id="view-hint" hidden style="flex-basis:100%;color:#385547">
 <span id="view-hint-text"></span> <a id="view-hint-source" target="_blank" rel="noopener noreferrer" hidden>原图机位</a>
 </div></header>
-<main id="canvas"></main><span id="cross">＋</span>
+<main id="canvas"></main>
+<figure id="boot-poster"><img src="../previews/r9-campus.jpg" alt="津南校区全景，正在准备三维场景" fetchpriority="high"></figure>
+<span id="cross">＋</span>
 <a id="enter-library" href="./library/?view=southDoor" hidden
  style="position:absolute;bottom:28%;left:50%;translate:-50% 0;z-index:2;padding:8px 13px;border-radius:4px;background:#f9fbf5ee;color:#243b32;text-decoration:none">E · 进入图书馆二层</a>
-<div id="load"><strong id="status">正在读取工程</strong><div id="error"></div><div id="detail"></div></div><div id="hud"></div>
+<div id="load"><strong id="status" aria-live="polite">正在加载三维校园…</strong><div id="error"></div><div id="detail"></div></div><div id="hud"></div>
 <aside id="campus-minimap" aria-label="校园小地图" hidden>
  <div class="map-bar"><span>校园地图</span><button id="campus-map-toggle" type="button" aria-expanded="true" aria-controls="campus-map-panel">收起</button></div>
  <div id="campus-map-panel"><img src="./maps/jinnan_overview.png" alt="津南校区道路、建筑和主要地标"><span id="campus-map-marker" aria-hidden="true"></span></div>
  <div class="map-coordinates"><div><strong id="campus-map-position">正在定位</strong><small>源坐标 · Y 为视点高度</small></div><button id="campus-map-copy" type="button" title="复制坐标、朝向和视野">复制机位</button></div>
 </aside>
-<script type="module" src="./app.js"></script>
+<script>
+{
+ const image=document.querySelector('#boot-poster img');
+ const mark=()=>performance.mark('campus:poster');
+ if(image.complete&&image.naturalWidth)mark();
+ else image.addEventListener('load',mark,{once:true});
+ if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./asset-cache.js').catch(()=>{});
+ }
+}
+</script>
+<script type="module" src="./app.js?v=r9-fast-1"></script>
 </html>

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {Sky} from 'three/addons/objects/Sky.js';
-import {createSceneStreamer} from './scene_stream.js';
+import {createSceneStreamer} from './scene_stream.js?v=r9-fast-1';
 import {finishCommercialPaving} from './commercial_paving.js';
 import {createLibraryLighting} from './library_lighting.js';
 import {attachDormPlanting} from './dorm_planting.js';
@@ -23,7 +23,7 @@ import {addAcademicEntranceIdentity,attachAcademicThresholds} from './academic_i
 import {correctedPavingHeight,fixPavingMesh} from './paving_grades.js';
 import {createMinimap} from './minimap.js';
 import {createDuskSky} from './dusk_sky.js';
-import {loadStreamingLOD} from './streaming_lod.js';
+import {attachStreamingLOD,readStreamingLOD} from './streaming_lod.js?v=r9-fast-1';
 import {restoreScienceCanalBridge} from './source_bridge.js';
 import {restoreScience5Hardscape} from './source_passage_hardscape.js';
 import {attachReviewGround} from './review_ground.js';
@@ -64,6 +64,8 @@ const loader=new GLTFLoader();const failures=[];const loadedAssets=new Set();con
 let scale=1,walking=false,yaw=0,pitch=0,lastTime=performance.now(),lastTrees=-1,lastHud=0;
 let treeInstances=[],treeForms=[],ground={},heightData,walkWater,colliders=[],views=[],frameSamples=[],walkingFrames=[];
 const treeSlots=new Map();
+const treeAssetIndex=new Map(),treeTemplatePending=new Set(),treeTemplateFailures=new Set();
+let vegetationInitialized=false;
 const shrubForms=['clipped','spreading','upright'];
 const shrubHeights=[.91,.78,1.02];
 const shrubWidths=[1.05,1.15,.89];
@@ -427,6 +429,50 @@ function makeTreeBatch(key,form,lod,count){
   mesh.castShadow=lod<2;mesh.receiveShadow=lod<2;mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);group.add(mesh);return mesh;
  });world.add(group);const batch={group,meshes,capacity:count,members:[]};treeBatches.set(key,batch);return batch;
 }
+function treeLod(tree,sx,sy,sz){
+ const [x,y,z]=tree.position;
+ const dist=Math.hypot(x-sx,z-sz,Math.max(0,sy-y-8));
+ const shrub=tree.category==='shrub';
+ if(shrub&&dist>220&&!eagerMode)return null;
+ const sizeFactor=shrub?Math.max(.10,Math.min(.5,tree.height/9)):1;
+ return dist<36*sizeFactor?0:dist<117*sizeFactor?1:dist<275*sizeFactor?2:3;
+}
+
+async function loadTreeTemplate(item){
+ const model=await asset(item.file||item.asset);
+ model.updateMatrixWorld(true);
+ const parts=[];
+ model.traverse(mesh=>{
+  if(!mesh.isMesh)return;
+  const geometry=mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+  const colors=geometry.attributes.color;
+  if(colors&&!treeColorsLinear){
+   const color=new THREE.Color();
+   for(let i=0;i<colors.count;i++){
+    color.fromBufferAttribute(colors,i).convertSRGBToLinear();
+    colors.setXYZ(i,color.r,color.g,color.b);
+   }
+  }
+  mesh.material.side=THREE.DoubleSide;
+  parts.push({name:mesh.name,geometry,material:mesh.material});
+ });
+ treeTemplates.set(item.form+'_'+item.lod,parts);
+}
+
+function requestTreeTemplate(key){
+ if(treeTemplatePending.size>=2||treeTemplatePending.has(key)||treeTemplateFailures.has(key))return;
+ const item=treeAssetIndex.get(key);
+ if(!item)return;
+ treeTemplatePending.add(key);
+ loadTreeTemplate(item).catch(error=>{
+  treeTemplateFailures.add(key);
+  console.error(error);
+ }).finally(()=>{
+  treeTemplatePending.delete(key);
+  lastTreePosition=null;
+ });
+}
+
 function updateTrees(){
  if(!treeInstances.length)return;
  const sx=camera.position.x/scale,sz=camera.position.z/scale,sy=camera.position.y/scale;
@@ -437,12 +483,13 @@ function updateTrees(){
  for(let index=0;index<treeInstances.length;index++){
   const tree=treeInstances[index];
   const p=tree.position;
-  const dist=Math.hypot(p[0]-sx,p[2]-sz,Math.max(0,sy-p[1]-8));
-  const shrub=tree.category==='shrub';
-  if(shrub&&dist>220&&!eagerMode)continue;
-  const sizeFactor=shrub?Math.max(.10,Math.min(.5,tree.height/9)):1;
-  const lod=dist<36*sizeFactor?0:dist<117*sizeFactor?1:dist<275*sizeFactor?2:3;
+  let lod=treeLod(tree,sx,sy,sz);
+  if(lod===null)continue;
   const form=tree.category==='shrub'?'r9_shrub_'+shrubForms[tree.shrubForm]:tree.variant;
+  if(!treeTemplates.has(form+'_'+lod)){
+   requestTreeTemplate(form+'_'+lod);
+   while(lod<3&&!treeTemplates.has(form+'_'+lod))lod++;
+  }
   const span=lod===3?512:128;const key=Math.floor(p[0]/span)+'_'+Math.floor(p[2]/span)+'_'+form+'_'+lod;
   if(!buckets.has(key))buckets.set(key,{form,lod,members:[]});buckets.get(key).members.push(index);
  }
@@ -654,7 +701,7 @@ function disposeSceneItem(model){
 }
 async function parallelLoad(items,callback,workers=5){let next=0,done=0;await Promise.all(Array.from({length:workers},async()=>{
  while(next<items.length){const item=items[next++];try{await callback(item)}catch(e){failures.push(String(e));$('error').textContent=failures.at(-1)}
- done++;$('status').textContent='正在加载连续校园 '+done+' / '+items.length;
+ if(eagerMode){done++;$('status').textContent='正在加载连续校园 '+done+' / '+items.length;}
  }}));}
 async function prewarmSurroundings(){
  const target=new THREE.WebGLRenderTarget(144,90);
@@ -681,19 +728,53 @@ async function prewarmSurroundings(){
  }
 }
 async function boot(){
- const [frames,manifest,cameras,treeRegistry,treeAssets,terrain]=await Promise.all(['world/coordinate_frames.json','world/runtime_asset_manifest.json','world/cameras.json','world/vegetation_registry.json','assets/vegetation/tree_assets.json','assets/surfaces/ground_height.json'].map(json));
- const [earlierCameras,facadeCameras]=await Promise.all(['world/r8_review_cameras.json','world/r9_review_cameras.json'].map(json));
- scale=frames.source_to_engineering.uniform_scale;world.scale.setScalar(scale);views=[...cameras.views,...facadeCameras.views,...refinementViews,...earlierCameras.views];ground=terrain;
- minimap=createMinimap(await json('runtime/maps/jinnan_overview.json'));
+ const files=[
+  'world/coordinate_frames.json','world/runtime_asset_manifest.json','world/cameras.json',
+  'world/r8_review_cameras.json','world/r9_review_cameras.json','runtime/maps/jinnan_overview.json',
+  'world/vegetation_registry.json','assets/vegetation/tree_assets.json','assets/surfaces/ground_height.json',
+  'world/r9_campus_perimeter.json','world/r9_science_satellite.json','world/r9_science_fixture_ranges.json',
+  'world/r9_library_forecourt.json','world/r9_culture_valley.json','world/r9_axis_planting.json',
+  'world/r9_waterfront.json','world/r9_waterfront_finish.json','world/r9_shengfan_entrance.json',
+  'world/r9_review_ground.json','world/r9_datong_entrance.json','world/r9_teaching_passage.json',
+  'world/r9_native_passages.json','world/r9_review_passages.json',
+ ];
+ const data=new Map(files.map(file=>[file,json(file)]));
+ const read=file=>data.get(file);
+ const framesTask=read(files[0]).then(frames=>{
+  scale=frames.source_to_engineering.uniform_scale;
+  world.scale.setScalar(scale);
+  return loadSurfacePbr();
+ });
+ const heightTask=read('assets/surfaces/ground_height.json').then(async terrain=>{
+  const response=await fetch('../'+terrain.file);
+  if(!response.ok)throw Error(terrain.file+' HTTP '+response.status);
+  return new Float32Array(await response.arrayBuffer());
+ });
+ const walksTask=read('world/runtime_asset_manifest.json').then(manifest=>
+  manifest.walkable_surface_file?json(manifest.walkable_surface_file):null);
+ const treesTask=read('world/vegetation_registry.json').then(registry=>json(registry.instance_file));
+ const textureLoader=new THREE.TextureLoader();
+ const waterTask=read('world/r9_waterfront.json').then(config=>Promise.all(
+  ['assets/materials/water_ripple_normal.png',config.atlas.file].map(file=>textureLoader.loadAsync('../'+file))
+ ));
+ const [worldData,elevation,walks,trees,water,wetPaths,flowers,streamIndex,lodData]=await Promise.all([
+  Promise.all(data.values()),heightTask,walksTask,treesTask,waterTask,loadWalkWater(),
+  loadFlowerProfiles(),eagerMode?null:json('world/streaming_assets.json'),eagerMode?null:readStreamingLOD(),
+  framesTask,loadMicrodetail(),
+ ]);
+ const [,manifest,cameras,earlierCameras,facadeCameras,map,,treeAssets,terrain,
+  perimeter,sport,fixtureRanges,forecourt,valley,axisPlantingConfig,
+  waterConfig,waterFinishConfig,entry,groundPlan,datongPlan,teachingPlan,nativePassages,passagePlan]=worldData;
+ views=[...cameras.views,...facadeCameras.views,...refinementViews,...earlierCameras.views];
+ ground=terrain;
+ heightData=elevation;
+ walkWater=wetPaths;
+ flowerProfiles=flowers;
+ minimap=createMinimap(map);
  if(new URLSearchParams(location.search).get('dusk')==='1')setDusk(true);
- [flowerProfiles]=await Promise.all([loadFlowerProfiles(),loadSurfacePbr(),loadMicrodetail()]);
- heightData=new Float32Array(await (await fetch('../'+ground.file)).arrayBuffer());
- const [perimeter,sport,fixtureRanges,forecourt,valley,axisPlantingConfig,waterConfig,waterFinishConfig,entry]=await Promise.all(
-    ['world/r9_campus_perimeter.json','world/r9_science_satellite.json','world/r9_science_fixture_ranges.json','world/r9_library_forecourt.json','world/r9_culture_valley.json','world/r9_axis_planting.json','world/r9_waterfront.json','world/r9_waterfront_finish.json','world/r9_shengfan_entrance.json'].map(json));
  shengfanApproach=entry;
  waterfrontFinish=createWaterfrontFinish(waterFinishConfig,scale);
- const textureLoader=new THREE.TextureLoader();
- const [wave,depth]=await Promise.all(['assets/materials/water_ripple_normal.png',waterConfig.atlas.file].map(file=>textureLoader.loadAsync('../'+file)));
+ const [wave,depth]=water;
  wave.wrapS=wave.wrapT=THREE.RepeatWrapping;
  wave.anisotropy=4;
  depth.generateMipmaps=false;
@@ -714,10 +795,9 @@ async function boot(){
   return {...metadata,data};
  },(x,z)=>inForecourt(x,z)||satelliteSite.blockPlant(x,z)||waterfront?.pathContains(x,z)||(x>-558&&x<-491&&z>-681&&z<-657),satelliteSite.extraHabitat,valley.mown_lawns);
  libraryLighting.addFixtures(scale,terrainY);
- walkWater=await loadWalkWater();
- reviewGround=attachReviewGround(world,await json('world/r9_review_ground.json'),inside,surfacePbr);
+ reviewGround=attachReviewGround(world,groundPlan,inside,surfacePbr);
  indexWalkSurfaces(reviewGround);
- if(manifest.walkable_surface_file)indexWalkSurfaces(await json(manifest.walkable_surface_file));
+ if(walks)indexWalkSurfaces(walks);
  indexWalkSurfaces(walkWater);
  scienceCanalBridge=restoreScienceCanalBridge(world);
  indexWalkSurfaces(scienceCanalBridge);
@@ -728,9 +808,8 @@ async function boot(){
  waterfrontFinish.finishPaving(world.getObjectByName('R9_WATERSIDE_MATIHU_SOUTH'));
  academicThresholds=attachAcademicThresholds(world);
  indexWalkSurfaces(academicThresholds);
- datongApproach=await json('world/r9_datong_entrance.json');
- teachingPassage=await json('world/r9_teaching_passage.json');
- const nativePassages=await json('world/r9_native_passages.json');
+ datongApproach=datongPlan;
+ teachingPassage=teachingPlan;
  sourcePassages=nativePassages.openings;
  for(const entry of nativePassages.reconstructed||[]){
   const x=[],z=[];
@@ -746,7 +825,7 @@ async function boot(){
   views.push({id:entry.id,label:entry.label,position:[start[0],eye,start[1]],
    target:[end[0],eye,end[1]],fov:72,accessNote:entry.access_note,sourceUrl:entry.source_url});
  }
- reviewPassages=(await json('world/r9_review_passages.json')).paths.map(p=>({
+ reviewPassages=passagePlan.paths.map(p=>({
   ...p,legs:p.walk.slice(1).map((b,i)=>[p.walk[i],b]),
  }));
  for(const passage of reviewPassages){
@@ -775,7 +854,7 @@ async function boot(){
  axisPlanting=createAxisPlanting(world,scale,forecourt,valley,axisPlantingConfig,groundY);
  colliders=[...(manifest.colliders||[]).filter(item=>item.id!==forecourt.building),...forecourt.colliders,
   ...cultureValley.occupancies,...passageHardscape.colliders];
- treeInstances=(await json(treeRegistry.instance_file)).instances;treeForms=treeAssets.forms;treeColorsLinear=treeAssets.vertex_colors_linear===true;
+ treeInstances=trees.instances;treeForms=treeAssets.forms;treeColorsLinear=treeAssets.vertex_colors_linear===true;
  treeInstances=treeInstances.filter(tree=>satelliteSite.campusContains(tree.position[0],tree.position[2])&&!satelliteSite.inSport(tree.position[0],tree.position[2])&&!inForecourt(tree.position[0],tree.position[2]));
  const groveVariants=treeForms.map(f=>f.id).filter(id=>/^spreading_/.test(id));
  for(const [x,z,variant,size,yaw] of perimeter.trees){
@@ -805,35 +884,61 @@ async function boot(){
  if(passageOptions.childElementCount)$('view').append(passageOptions);
  setView(views.find(v=>v.id===initialView)||views[0]);
  if(new URLSearchParams(location.search).get('walk')==='1'){enterWalk();canvas.focus({preventScroll:true});}
+ const showScene=()=>{
+  renderer.render(scene,camera);
+  $('boot-poster').hidden=true;
+  performance.mark('campus:first-scene');
+ };
+ let treesReady=false;
  const loadItems=eagerMode?manifest.assets.map(a=>({...a,type:'scene'})):[];
- for(const form of treeForms)for(const item of form.assets)loadItems.push({...item,form:form.id,type:'tree'});
- await parallelLoad(loadItems,async item=>{
-  const model=await asset(item.file||item.asset);
-  if(item.type==='tree'){
-   model.updateMatrixWorld(true);const parts=[];model.traverse(mesh=>{
-    if(!mesh.isMesh)return;const geometry=mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
-    const colors=geometry.attributes.color;
-    if(colors&&!treeColorsLinear){const color=new THREE.Color();for(let i=0;i<colors.count;i++){color.fromBufferAttribute(colors,i).convertSRGBToLinear();colors.setXYZ(i,color.r,color.g,color.b);}}
-    mesh.material.side=THREE.DoubleSide;parts.push({name:mesh.name,geometry,material:mesh.material});
-   });treeTemplates.set(item.form+'_'+item.lod,parts);
-  }else{model.name=item.id;prepareModel(model,item.kind);world.add(model);}
+ for(const form of treeForms)for(const item of form.assets)
+  treeAssetIndex.set(form.id+'_'+item.lod,{...item,form:form.id,type:'tree'});
+ if(eagerMode)loadItems.push(...treeAssetIndex.values());
+ else{
+  const [sx,sy,sz]=camera.position.toArray().map(value=>value/scale);
+  const needed=new Set(['young_05_0']);
+  for(const item of treeAssetIndex.values())if(item.lod===3)needed.add(item.form+'_3');
+  for(const tree of treeInstances)if(tree.category==='tree')
+   needed.add(tree.variant+'_'+treeLod(tree,sx,sy,sz));
+  for(const key of needed){
+   const template=treeAssetIndex.get(key);
+   if(!template)throw Error('植被资源索引缺失 '+key);
+   loadItems.push(template);
+  }
+ }
+ const loadTemplates=()=>parallelLoad(loadItems,async item=>{
+  if(item.type==='tree')await loadTreeTemplate(item);
+  else{
+   const model=await asset(item.file||item.asset);
+   model.name=item.id;
+   prepareModel(model,item.kind);
+   world.add(model);
+  }
  });
- registerShrubTemplates();
- sceneInitialized=true;
- updateTrees();
+ function placeTrees(){
+  for(const item of loadItems)if(item.type==='tree'&&!treeTemplates.has(item.form+'_'+item.lod))
+   throw Error('植被资源读取失败 '+item.form+'_'+item.lod);
+  registerShrubTemplates();
+  updateTrees();
+  vegetationInitialized=true;
+  treesReady=true;
+ }
  if(eagerMode){
-  await renderer.compileAsync(scene,camera);renderer.render(scene,camera);
+  await loadTemplates();
+  placeTrees();
+  sceneInitialized=true;
+  await renderer.compileAsync(scene,camera);
+  showScene();
   $('status').textContent=failures.length?'加载存在问题':'连续校园已就绪';
   window.campus.ready=failures.length===0;
  }else{
-  const streamIndex=await json('world/streaming_assets.json');
   const files=new Map(manifest.assets.map(item=>[item.id,item.file]));
   if(streamIndex.assets.length!==files.size||new Set(streamIndex.assets.map(item=>item.id)).size!==files.size||
      streamIndex.assets.some(item=>files.get(item.id)!==item.file))throw Error('分区索引与场景清单不符');
   let geometryRevision=0,priming=null,warmed=false;
   const visibleFootprints=streamIndex.assets.filter(item=>!['surface','ground_flora'].includes(item.kind)||
    satelliteSite.footprintInCampus(...item.bounds));
-  const proxies=await loadStreamingLOD(visibleFootprints,world,satelliteSite,terrainY);
+  const proxies=attachStreamingLOD(lodData,visibleFootprints,world,satelliteSite,terrainY);
   const missing=visibleFootprints.filter(item=>['building','surface'].includes(item.kind)&&!proxies.has(item.id));
   if(missing.length)throw Error('轮廓资源缺失 '+missing.map(item=>item.id).join(', '));
   streamer=createSceneStreamer({camera,world,items:visibleFootprints,proxies,scale,load:loadSceneItem,dispose:disposeSceneItem,
@@ -843,7 +948,7 @@ async function boot(){
     waterRenderer.invalidate();
    }
    geometryRevision=state.revision;
-   const ready=state.missingStructural.length===0&&state.nearbyMissing===0&&state.failures.length===0&&failures.length===0;
+   const ready=treesReady&&state.missingStructural.length===0&&state.nearbyMissing===0&&state.failures.length===0&&failures.length===0;
    if(ready&&!priming)priming=prewarmSurroundings().then(()=>{warmed=true;}).catch(error=>{
     failures.push(String(error));console.error(error);
    });
@@ -852,9 +957,14 @@ async function boot(){
     `高精度分区 ${state.loadedVisible} / ${state.wanted} · 已显示轮廓分区 ${state.visibleProxies}`+(warmed?'':' · 正在准备周边画面');
    $('error').textContent=state.failures.at(-1)||failures.at(-1)||'';
   }});
+  sceneInitialized=true;
+  showScene();
   streamer.start();
   addEventListener('pagehide',()=>streamer.stop());
   addEventListener('pageshow',event=>{if(event.persisted)streamer.start();});
+  await loadTemplates();
+  placeTrees();
+  streamer.refresh();
  }
  $('detail').textContent=treeInstances.length.toLocaleString()+' 株树木与灌丛 · '+(manifest.ground_flora_source_units||0)+' 低植被单元（含 '+(manifest.ground_flora_low_shrub_patches||0)+' 矮灌丛） · '+(manifest.aquatic_instances||0)+' 片水生叶 / '+(manifest.aquatic_flowers||0)+' 株水生花 · '+(manifest.moss_ground_cover_source_groups||0)+' 苔藓源组地被 · '+manifest.assets.length+' 个场景资源 · 工程尺度 '+scale.toFixed(6)+' m/u（暂定）';
 }
@@ -1002,7 +1112,7 @@ function animate(now){
   }).catch(error=>{failures.push(String(error));console.error(error);});
  }
  if(updateDormPlanting?.(camera,scale))renderer.shadowMap.needsUpdate=true;
- if(now-lastTrees>230&&sceneInitialized){updateTrees();lastTrees=now;}
+ if(now-lastTrees>230&&vegetationInitialized){updateTrees();lastTrees=now;}
  const cx=Math.round(camera.position.x/16)*16,cz=Math.round(camera.position.z/16)*16,newShadowCell=cx+'_'+cz;
  if(newShadowCell!==shadowCell){shadowCell=newShadowCell;sun.target.position.set(cx,0,cz);sun.position.copy(sun.target.position).add(new THREE.Vector3(-100,180,90));renderer.shadowMap.needsUpdate=true;}
  if(sceneInitialized){

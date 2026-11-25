@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
-export async function loadStreamingLOD(items,world,satelliteSite,terrainY){
+export async function readStreamingLOD(){
  const meta=await fetch('../assets/streaming/campus_lod.json').then(response=>{
   if(!response.ok)throw Error('校园轮廓索引 HTTP '+response.status);
   return response.json();
@@ -14,6 +14,10 @@ export async function loadStreamingLOD(items,world,satelliteSite,terrainY){
   new THREE.TextureLoader().loadAsync('../'+meta.terrain.file),
  ]);
  if(decoded.byteLength!==meta.decoded_bytes)throw Error('校园轮廓资源长度不匹配');
+ return {meta,decoded,atlas};
+}
+
+export function attachStreamingLOD({meta,decoded,atlas},items,world,satelliteSite,terrainY){
  const models=new Map();
  atlas.colorSpace=THREE.SRGBColorSpace;
  atlas.flipY=false;

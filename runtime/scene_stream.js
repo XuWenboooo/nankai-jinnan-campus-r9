@@ -44,6 +44,9 @@ export function createSceneStreamer({camera,world,items,proxies,load,dispose,onC
  }
 
  function pump(){
+  // Frustum classification also changes when the camera turns in place.
+  const weight=entry=>entry.distance+(entry.visible?0:100*scale)+(isStructure(entry.item)?0:70*scale);
+  priority.sort((a,b)=>weight(a)-weight(b));
   const duringMotion=settled&&moving();
   for(const entry of priority){
    if(active>=(settled?2:4))break;
@@ -111,8 +114,6 @@ export function createSceneStreamer({camera,world,items,proxies,load,dispose,onC
   }
   recent.sort((a,b)=>b.seen-a.seen);
   for(const entry of recent.slice(24))release(entry);
-  priority.sort((a,b)=>(a.distance+(isStructure(a.item)?0:70))-
-   (b.distance+(isStructure(b.item)?0:70)));
   pump();
   notify();
  }
